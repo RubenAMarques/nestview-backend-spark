@@ -15,9 +15,9 @@ export const PriceSparkline = ({ listingId, currentPrice }: PriceSparklineProps)
     queryFn: async () => {
       const { data, error } = await supabase
         .from('listing_prices')
-        .select('price_eur, created_at')
+        .select('price_eur, changed_at')
         .eq('listing_id', listingId)
-        .order('created_at', { ascending: true });
+        .order('changed_at', { ascending: true });
       
       if (error) throw error;
       return data;
@@ -35,7 +35,7 @@ export const PriceSparkline = ({ listingId, currentPrice }: PriceSparklineProps)
 
   const chartData = priceHistory.map(item => ({
     price: item.price_eur,
-    date: item.created_at,
+    date: item.changed_at,
   }));
 
   const firstPrice = priceHistory[0]?.price_eur || currentPrice;

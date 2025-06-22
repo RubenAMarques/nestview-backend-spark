@@ -1,4 +1,3 @@
-
 import { useState, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
@@ -21,12 +20,22 @@ interface MapMarker {
   listing: any;
 }
 
+interface ActiveFilters {
+  priceMin?: string;
+  priceMax?: string;
+  bedrooms?: string;
+  bathrooms?: string;
+  areaMin?: string;
+  areaMax?: string;
+  status?: string;
+}
+
 export const MapView = ({ onEdit }: MapViewProps) => {
   const [selectedListing, setSelectedListing] = useState(null);
   const [showBottomSheet, setShowBottomSheet] = useState(false);
   const [showListingDetail, setShowListingDetail] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
-  const [activeFilters, setActiveFilters] = useState({});
+  const [activeFilters, setActiveFilters] = useState<ActiveFilters>({});
   const [mapRegion, setMapRegion] = useState({
     latitude: 52.3676,  // Amsterdam
     longitude: 4.9041,
@@ -84,7 +93,7 @@ export const MapView = ({ onEdit }: MapViewProps) => {
     setShowListingDetail(true);
   };
 
-  const handleApplyFilters = (filters: any) => {
+  const handleApplyFilters = (filters: ActiveFilters) => {
     setActiveFilters(filters);
   };
 
