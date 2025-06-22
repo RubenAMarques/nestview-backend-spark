@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { Home, Search, Plus, Heart, User } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
+import { useUser } from '@/hooks/useUser';
 import { AuthForm } from '@/components/AuthForm';
 import { MapView } from '@/components/MapView';
 import { SearchView } from '@/components/SearchView';
@@ -13,6 +14,7 @@ type TabType = 'map' | 'search' | 'add' | 'favorites' | 'profile';
 
 export const MobileLayout = () => {
   const { user, isLoading } = useAuth();
+  const currentUser = useUser();
   const [activeTab, setActiveTab] = useState<TabType>('map');
   const [editingListing, setEditingListing] = useState(null);
 
@@ -66,7 +68,7 @@ export const MobileLayout = () => {
     }
   };
 
-  const isAgent = user?.role === 'agent';
+  const isAgent = currentUser?.role === 'agent';
 
   const tabs = [
     { id: 'map' as TabType, icon: Home, label: 'Map' },

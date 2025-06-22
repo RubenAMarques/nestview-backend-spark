@@ -64,12 +64,13 @@ export const MobileListingCard = ({
   };
 
   const canEdit = user?.id === listing.agent_id || user?.role === 'admin';
+  const showAgentBadge = user?.role === 'buyer' || user?.role === 'investor';
 
   return (
-    <Card className="bg-gray-800 border-gray-700 text-white">
+    <Card className="bg-gray-900 border-gray-800 text-white relative">
       <CardContent className="p-0">
         {/* Image Placeholder */}
-        <div className="aspect-[4/3] bg-gradient-to-br from-gray-700 to-gray-800 rounded-t-lg flex items-center justify-center relative">
+        <div className="aspect-[4/3] bg-gradient-to-br from-gray-800 to-gray-900 rounded-t-lg flex items-center justify-center relative">
           <div className="text-gray-400 text-center">
             <Square className="w-12 h-12 mx-auto mb-2" />
             <span className="text-sm">Property Image</span>
@@ -91,13 +92,22 @@ export const MobileListingCard = ({
               {listing.status.replace('_', ' ')}
             </Badge>
           </div>
+
+          {/* Agent Badge for buyers/investors */}
+          {showAgentBadge && (
+            <div className="absolute top-3 left-3">
+              <Badge className="bg-orange-500/20 text-orange-400 border-orange-500/30">
+                Agent Listed
+              </Badge>
+            </div>
+          )}
         </div>
 
         {/* Content */}
         <div className="p-4">
           {/* Price and Title */}
           <div className="mb-3">
-            <div className="text-2xl font-bold text-blue-400 mb-1">
+            <div className="text-2xl font-bold text-orange-500 mb-1">
               {formatPrice(listing.price_eur)}
             </div>
             <h3 className="text-lg font-semibold text-white line-clamp-2">
@@ -149,7 +159,7 @@ export const MobileListingCard = ({
             {showFullDetails && (
               <Button
                 onClick={() => setShowContact(!showContact)}
-                className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
+                className="flex-1 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white"
               >
                 <Phone className="w-4 h-4 mr-2" />
                 Contact Agent
@@ -170,32 +180,32 @@ export const MobileListingCard = ({
 
           {/* Contact Form (if shown) */}
           {showContact && showFullDetails && (
-            <div className="mt-4 p-4 bg-gray-700/50 rounded-lg">
+            <div className="mt-4 p-4 bg-gray-800/50 rounded-lg">
               <h4 className="font-semibold mb-3">Contact Agent</h4>
               <div className="space-y-3">
                 <input
                   type="text"
                   placeholder="Your name"
-                  className="w-full p-3 bg-gray-600 border border-gray-500 rounded-lg text-white placeholder-gray-400"
+                  className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400"
                 />
                 <div className="flex gap-2">
                   <input
                     type="email"
                     placeholder="Email"
-                    className="flex-1 p-3 bg-gray-600 border border-gray-500 rounded-lg text-white placeholder-gray-400"
+                    className="flex-1 p-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400"
                   />
                   <input
                     type="tel"
                     placeholder="Phone"
-                    className="flex-1 p-3 bg-gray-600 border border-gray-500 rounded-lg text-white placeholder-gray-400"
+                    className="flex-1 p-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400"
                   />
                 </div>
                 <textarea
                   placeholder="Message..."
                   rows={3}
-                  className="w-full p-3 bg-gray-600 border border-gray-500 rounded-lg text-white placeholder-gray-400 resize-none"
+                  className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 resize-none"
                 />
-                <Button className="w-full bg-blue-600 hover:bg-blue-700">
+                <Button className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700">
                   <Mail className="w-4 h-4 mr-2" />
                   Send Message
                 </Button>
