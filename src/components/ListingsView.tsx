@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
@@ -8,6 +9,9 @@ import { Button } from '@/components/ui/button';
 import { Search, Filter } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
+import { Database } from '@/integrations/supabase/types';
+
+type ListingStatus = Database['public']['Enums']['listing_status'];
 
 interface ListingsViewProps {
   onEdit?: (listing: any) => void;
@@ -18,7 +22,7 @@ export const ListingsView = ({ onEdit }: ListingsViewProps) => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState('all');
+  const [statusFilter, setStatusFilter] = useState<ListingStatus | 'all'>('all');
   const [priceRange, setPriceRange] = useState('all');
 
   const { data: listings = [], isLoading } = useQuery({
@@ -135,7 +139,7 @@ export const ListingsView = ({ onEdit }: ListingsViewProps) => {
           </div>
           
           <div className="flex gap-4">
-            <Select value={statusFilter} onValueChange={setStatusFilter}>
+            <Select value={statusFilter} onValueChange={(value: ListingStatus | 'all') => setStatusFilter(value)}>
               <SelectTrigger className="w-40">
                 <SelectValue placeholder="Status" />
               </SelectTrigger>

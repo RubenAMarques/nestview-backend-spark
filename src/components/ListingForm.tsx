@@ -10,6 +10,9 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/hooks/useAuth';
+import { Database } from '@/integrations/supabase/types';
+
+type ListingStatus = Database['public']['Enums']['listing_status'];
 
 interface Listing {
   id?: string;
@@ -22,7 +25,7 @@ interface Listing {
   address?: string;
   city?: string;
   postal_code?: string;
-  status?: string;
+  status?: ListingStatus;
 }
 
 interface ListingFormProps {
@@ -46,7 +49,7 @@ export const ListingForm = ({ listing, onSuccess, onCancel }: ListingFormProps) 
     address: '',
     city: '',
     postal_code: '',
-    status: 'pending',
+    status: 'pending' as ListingStatus,
     ...listing,
   });
 
@@ -60,20 +63,26 @@ export const ListingForm = ({ listing, onSuccess, onCancel }: ListingFormProps) 
     mutationFn: async (data: Listing) => {
       if (listing?.id) {
         // Update existing listing
+        const updateData: any = {
+          title: data.title,
+          description: data.description,
+          price_eur: data.price_eur,
+          bedrooms: data.bedrooms,
+          bathrooms: data.bathrooms,
+          area_m2: data.area_m2,
+          address: data.address,
+          city: data.city,
+          postal_code: data.postal_code,
+        };
+
+        // Only add status if user is admin
+        if (user?.role === 'admin' && data.status) {
+          updateData.status = data.status;
+        }
+
         const { data: result, error } = await supabase
           .from('listings')
-          .update({
-            title: data.title,
-            description: data.description,
-            price_eur: data.price_eur,
-            bedrooms: data.bedrooms,
-            bathrooms: data.bathrooms,
-            area_m2: data.area_m2,
-            address: data.address,
-            city: data.city,
-            postal_code: data.postal_code,
-            ...(user?.role === 'admin' && { status: data.status }),
-          })
+          .update(updateData)
           .eq('id', listing.id)
           .select()
           .single();
@@ -250,7 +259,7 @@ export const ListingForm = ({ listing, onSuccess, onCancel }: ListingFormProps) 
           {user?.role === 'admin' && (
             <div>
               <Label htmlFor="status">Status</Label>
-              <Select value={formData.status} onValueChange={(value) => handleChange('status', value)}>
+              <Select value={formData.status} onValueChange={(value: ListingStatus) => handleChange('status', value)}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
