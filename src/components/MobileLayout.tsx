@@ -18,7 +18,7 @@ export const MobileLayout = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+      <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="text-white text-lg">Loading...</div>
       </div>
     );
@@ -66,23 +66,25 @@ export const MobileLayout = () => {
     }
   };
 
+  const isAgent = user?.role === 'agent';
+
   const tabs = [
     { id: 'map' as TabType, icon: Home, label: 'Map' },
     { id: 'search' as TabType, icon: Search, label: 'Search' },
-    { id: 'add' as TabType, icon: Plus, label: 'Add' },
+    ...(isAgent ? [{ id: 'add' as TabType, icon: Plus, label: 'Add' }] : []),
     { id: 'favorites' as TabType, icon: Heart, label: 'Favorites' },
     { id: 'profile' as TabType, icon: User, label: 'Profile' },
   ];
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white flex flex-col">
+    <div className="min-h-screen bg-black text-white flex flex-col">
       {/* Main Content */}
       <div className="flex-1 overflow-hidden">
         {renderContent()}
       </div>
 
       {/* Bottom Navigation */}
-      <div className="bg-gray-800 border-t border-gray-700 px-2 py-2 safe-area-bottom">
+      <div className="bg-gray-900 border-t border-gray-800 px-2 py-2 safe-area-bottom">
         <div className="flex justify-around items-center">
           {tabs.map(({ id, icon: Icon, label }) => (
             <button
@@ -90,7 +92,7 @@ export const MobileLayout = () => {
               onClick={() => setActiveTab(id)}
               className={`flex flex-col items-center py-2 px-3 rounded-lg transition-colors ${
                 activeTab === id
-                  ? 'text-blue-400 bg-gray-700'
+                  ? 'text-orange-500 bg-gray-800'
                   : 'text-gray-400 hover:text-gray-200'
               }`}
             >

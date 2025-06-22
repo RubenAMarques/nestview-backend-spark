@@ -2,13 +2,14 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import type { AppRole } from '@/constants/roles';
 
 export interface User {
   id: string;
   email: string;
   first_name?: string;
   last_name?: string;
-  role: string;
+  role: AppRole;
 }
 
 export const useAuth = () => {
@@ -32,12 +33,12 @@ export const useAuth = () => {
   });
 
   const signUp = useMutation({
-    mutationFn: async ({ email, password, firstName, lastName, role = 'agent' }: {
+    mutationFn: async ({ email, password, firstName, lastName, role = 'buyer' }: {
       email: string;
       password: string;
       firstName?: string;
       lastName?: string;
-      role?: string;
+      role?: AppRole;
     }) => {
       const { data, error } = await supabase.auth.signUp({
         email,
