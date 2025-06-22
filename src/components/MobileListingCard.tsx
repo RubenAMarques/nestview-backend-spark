@@ -4,7 +4,10 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { MapPin, Bed, Bath, Square, Heart, Edit, Phone, Mail } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
+import { useUser } from '@/hooks/useUser';
+import { useHapticFeedback } from '@/hooks/useHapticFeedback';
 import { useState } from 'react';
+import { Colors, Fonts } from '@/theme/tokens';
 
 interface Listing {
   id: string;
@@ -36,6 +39,8 @@ export const MobileListingCard = ({
   showFullDetails = false 
 }: MobileListingCardProps) => {
   const { user } = useAuth();
+  const currentUser = useUser();
+  const haptic = useHapticFeedback();
   const [showContact, setShowContact] = useState(false);
 
   const formatPrice = (price: number) => {
@@ -64,22 +69,28 @@ export const MobileListingCard = ({
   };
 
   const canEdit = user?.id === listing.agent_id || user?.role === 'admin';
-  const showAgentBadge = user?.role === 'buyer' || user?.role === 'investor';
+  const showAgentBadge = currentUser?.role === 'buyer' || currentUser?.role === 'investor';
+
+  const handleHeartToggle = () => {
+    haptic.light();
+    onToggleFavorite?.(listing.id);
+  };
 
   return (
-    <Card className="bg-gray-900 border-gray-800 text-white relative">
+    <Card className="bg-gray-900 border-gray-800 text-white relative overflow-hidden">
       <CardContent className="p-0">
         {/* Image Placeholder */}
         <div className="aspect-[4/3] bg-gradient-to-br from-gray-800 to-gray-900 rounded-t-lg flex items-center justify-center relative">
           <div className="text-gray-400 text-center">
             <Square className="w-12 h-12 mx-auto mb-2" />
-            <span className="text-sm">Property Image</span>
+            <span className="text-sm">Property Gallery</span>
+            <div className="text-xs text-gray-500 mt-1">6+ Photos Available</div>
           </div>
           
           {/* Heart Button */}
           {onToggleFavorite && (
             <button
-              onClick={() => onToggleFavorite(listing.id)}
+              onClick={handleHeartToggle}
               className="absolute top-3 right-3 p-2 bg-black/50 backdrop-blur-sm rounded-full hover:bg-black/70 transition-colors"
             >
               <Heart className={`w-5 h-5 ${isFavorited ? 'fill-red-500 text-red-500' : 'text-white'}`} />
@@ -88,7 +99,7 @@ export const MobileListingCard = ({
 
           {/* Status Badge */}
           <div className="absolute bottom-3 left-3">
-            <Badge className={`${getStatusColor(listing.status)} border`}>
+            <Badge className={`${getStatusColor(listing.status)} border text-xs px-2 py-1`}>
               {listing.status.replace('_', ' ')}
             </Badge>
           </div>
@@ -96,7 +107,7 @@ export const MobileListingCard = ({
           {/* Agent Badge for buyers/investors */}
           {showAgentBadge && (
             <div className="absolute top-3 left-3">
-              <Badge className="bg-orange-500/20 text-orange-400 border-orange-500/30">
+              <Badge className="bg-orange-500/90 text-white border-orange-500/30 text-xs px-2 py-1 font-medium">
                 Agent Listed
               </Badge>
             </div>
@@ -104,19 +115,25 @@ export const MobileListingCard = ({
         </div>
 
         {/* Content */}
-        <div className="p-4">
+        <div className="p-4 space-y-4">
           {/* Price and Title */}
-          <div className="mb-3">
-            <div className="text-2xl font-bold text-orange-500 mb-1">
+          <div>
+            <div 
+              className="text-2xl font-bold text-orange-500 mb-1"
+              style={{ ...Fonts.display, fontSize: '24px' }}
+            >
               {formatPrice(listing.price_eur)}
             </div>
-            <h3 className="text-lg font-semibold text-white line-clamp-2">
+            <h3 
+              className="text-lg font-semibold text-white line-clamp-2"
+              style={Fonts.title}
+            >
               {listing.title}
             </h3>
           </div>
 
           {/* Property Details */}
-          <div className="flex flex-wrap gap-4 mb-3 text-gray-300">
+          <div className="flex flex-wrap gap-4 text-gray-300">
             <div className="flex items-center gap-1">
               <Bed className="w-4 h-4" />
               <span className="text-sm">{listing.bedrooms} bed{listing.bedrooms !== 1 ? 's' : ''}</span>
@@ -137,7 +154,7 @@ export const MobileListingCard = ({
 
           {/* Location */}
           {(listing.address || listing.city) && (
-            <div className="flex items-center gap-1 text-gray-400 mb-3">
+            <div className="flex items-center gap-1 text-gray-400">
               <MapPin className="w-4 h-4" />
               <span className="text-sm">
                 {[listing.address, listing.city].filter(Boolean).join(', ')}
@@ -147,7 +164,7 @@ export const MobileListingCard = ({
 
           {/* Description (if full details) */}
           {showFullDetails && listing.description && (
-            <div className="mb-4">
+            <div>
               <p className="text-gray-300 text-sm leading-relaxed">
                 {listing.description}
               </p>
@@ -155,14 +172,16 @@ export const MobileListingCard = ({
           )}
 
           {/* Action Buttons */}
-          <div className="flex gap-2">
+          <div className="flex gap-2 pt-2">
             {showFullDetails && (
               <Button
                 onClick={() => setShowContact(!showContact)}
-                className="flex-1 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white"
+                className="flex-1 bg-transparent border border-white text-white hover:bg-white hover:text-black transition-colors rounded-full py-3 flex items-center justify-center gap-2"
+                style={{ fontSize: '14px', fontWeight: '500' }}
               >
-                <Phone className="w-4 h-4 mr-2" />
+                <Phone className="w-4 h-4" />
                 Contact Agent
+                <span className="ml-1">→</span>
               </Button>
             )}
             
@@ -170,7 +189,7 @@ export const MobileListingCard = ({
               <Button
                 variant="outline"
                 onClick={() => onEdit(listing)}
-                className="border-gray-600 text-gray-300 hover:bg-gray-700"
+                className="border-gray-600 text-gray-300 hover:bg-gray-700 hover:text-white rounded-full px-4"
               >
                 <Edit className="w-4 h-4 mr-2" />
                 Edit
@@ -180,32 +199,32 @@ export const MobileListingCard = ({
 
           {/* Contact Form (if shown) */}
           {showContact && showFullDetails && (
-            <div className="mt-4 p-4 bg-gray-800/50 rounded-lg">
-              <h4 className="font-semibold mb-3">Contact Agent</h4>
+            <div className="mt-4 p-4 bg-gray-800/50 rounded-lg border border-gray-700">
+              <h4 className="font-semibold mb-3 text-white">Contact Agent</h4>
               <div className="space-y-3">
                 <input
                   type="text"
                   placeholder="Your name"
-                  className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400"
+                  className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-orange-500 focus:outline-none"
                 />
                 <div className="flex gap-2">
                   <input
                     type="email"
                     placeholder="Email"
-                    className="flex-1 p-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400"
+                    className="flex-1 p-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-orange-500 focus:outline-none"
                   />
                   <input
                     type="tel"
                     placeholder="Phone"
-                    className="flex-1 p-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400"
+                    className="flex-1 p-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-orange-500 focus:outline-none"
                   />
                 </div>
                 <textarea
-                  placeholder="Message..."
+                  placeholder="I'm interested in this property..."
                   rows={3}
-                  className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 resize-none"
+                  className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 resize-none focus:border-orange-500 focus:outline-none"
                 />
-                <Button className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700">
+                <Button className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 rounded-full">
                   <Mail className="w-4 h-4 mr-2" />
                   Send Message
                 </Button>
