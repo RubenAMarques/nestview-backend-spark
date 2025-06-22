@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
@@ -84,7 +83,7 @@ export const ListingsView = ({ onEdit }: ListingsViewProps) => {
       } else {
         const { error } = await supabase
           .from('user_favourites')
-          .insert({ user_i d: user!.id, listing_id: listingId });
+          .insert({ user_id: user!.id, listing_id: listingId });
         if (error) throw error;
       }
     },
