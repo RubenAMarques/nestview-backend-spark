@@ -12,7 +12,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/hooks/useAuth';
 import { ImagePickerRow } from './ImagePickerRow';
 import { Database } from '@/integrations/supabase/types';
-import { Colors, Fonts } from '@/theme/tokens';
+import { Colors, Typography } from '@/theme/tokens';
 
 type ListingStatus = Database['public']['Enums']['listing_status'];
 
@@ -156,7 +156,7 @@ export const ListingForm = ({ listing, onSuccess, onCancel }: ListingFormProps) 
     <div className="min-h-screen bg-black p-4">
       <Card className="max-w-2xl mx-auto bg-gray-900 border-gray-800">
         <CardHeader>
-          <CardTitle className="text-white" style={Fonts.display}>
+          <CardTitle className="text-white" style={Typography.title}>
             {listing?.id ? 'Edit Listing' : 'Create New Listing'}
           </CardTitle>
           <CardDescription className="text-gray-400">

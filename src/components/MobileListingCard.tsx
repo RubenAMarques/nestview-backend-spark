@@ -7,7 +7,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useUser } from '@/hooks/useUser';
 import { useHapticFeedback } from '@/hooks/useHapticFeedback';
 import { useState } from 'react';
-import { Colors, Fonts } from '@/theme/tokens';
+import { Colors, Typography } from '@/theme/tokens';
 
 interface Listing {
   id: string;
@@ -120,13 +120,13 @@ export const MobileListingCard = ({
           <div>
             <div 
               className="text-2xl font-bold text-orange-500 mb-1"
-              style={{ ...Fonts.display, fontSize: '24px' }}
+              style={Typography.title}
             >
               {formatPrice(listing.price_eur)}
             </div>
             <h3 
               className="text-lg font-semibold text-white line-clamp-2"
-              style={Fonts.title}
+              style={Typography.subtitle}
             >
               {listing.title}
             </h3>

@@ -10,7 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { PriceSparkline } from './PriceSparkline';
 import { BottomSheet } from './BottomSheet';
-import { Colors, Fonts } from '@/theme/tokens';
+import { Colors, Typography } from '@/theme/tokens';
 
 interface ListingDetailProps {
   listingId: string;
@@ -169,10 +169,10 @@ export const ListingDetail = ({ listingId, onClose }: ListingDetailProps) => {
       <div className="px-6 py-6 space-y-6">
         {/* Price and Title */}
         <div>
-          <div className="text-3xl font-bold text-orange-500 mb-2" style={Fonts.display}>
+          <div className="text-3xl font-bold text-orange-500 mb-2" style={Typography.hero}>
             {formatPrice(listing.price_eur)}
           </div>
-          <h1 className="text-2xl font-semibold text-white mb-2" style={Fonts.title}>
+          <h1 className="text-2xl font-semibold text-white mb-2" style={Typography.title}>
             {listing.title}
           </h1>
           {(listing.address || listing.city) && (

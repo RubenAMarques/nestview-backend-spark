@@ -6,7 +6,7 @@ import { SkeletonLoader } from './SkeletonLoader';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import { Heart } from 'lucide-react';
-import { Colors, Fonts } from '@/theme/tokens';
+import { Colors, Typography } from '@/theme/tokens';
 
 interface FavoritesViewProps {
   onEdit?: (listing: any) => void;
@@ -89,7 +89,7 @@ export const FavoritesView = ({ onEdit }: FavoritesViewProps) => {
     return (
       <div className="flex-1 bg-black flex flex-col">
         <div className="p-4 bg-gray-900 border-b border-gray-800">
-          <h1 className="text-2xl font-bold text-white" style={Fonts.display}>Saved Properties</h1>
+          <h1 className="text-2xl font-bold text-white" style={Typography.title}>Saved Properties</h1>
         </div>
         <div className="flex-1 p-4">
           <SkeletonLoader variant="card" count={3} />
@@ -102,7 +102,7 @@ export const FavoritesView = ({ onEdit }: FavoritesViewProps) => {
     <div className="flex-1 bg-black flex flex-col">
       {/* Header */}
       <div className="p-4 bg-gray-900 border-b border-gray-800">
-        <h1 className="text-2xl font-bold text-white" style={Fonts.display}>Saved Properties</h1>
+        <h1 className="text-2xl font-bold text-white" style={Typography.title}>Saved Properties</h1>
         <p className="text-gray-400 text-sm mt-1">
           {favorites.length} saved propert{favorites.length !== 1 ? 'ies' : 'y'}
         </p>
@@ -115,7 +115,7 @@ export const FavoritesView = ({ onEdit }: FavoritesViewProps) => {
             <div className="w-16 h-16 bg-gray-800 rounded-full flex items-center justify-center mb-4">
               <Heart className="w-8 h-8 text-gray-600" />
             </div>
-            <div className="text-gray-400 text-lg text-center" style={Fonts.title}>No saved properties</div>
+            <div className="text-gray-400 text-lg text-center" style={Typography.subtitle}>No saved properties</div>
             <div className="text-gray-500 text-sm text-center mt-2">
               Properties you save will appear here
             </div>

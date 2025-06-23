@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Colors, Fonts, Spacing, BorderRadius } from '@/theme/tokens';
+import { Colors, Typography, Spacing, BorderRadius } from '@/theme/tokens';
 
 interface FilterModalProps {
   isOpen: boolean;
@@ -66,7 +66,7 @@ export const FilterModal = ({ isOpen, onClose, onApplyFilters }: FilterModalProp
           <div>
             <h2 
               className="text-2xl font-semibold text-white"
-              style={{ ...Fonts.display, fontSize: '24px' }}
+              style={Typography.title}
             >
               Filter Properties
             </h2>
