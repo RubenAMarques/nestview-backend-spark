@@ -20,7 +20,7 @@ export const MobileLayout = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
+      <div className="min-h-screen bg-[#0F0F0F] flex items-center justify-center">
         <div className="text-white text-lg font-light">Loading...</div>
       </div>
     );
@@ -79,23 +79,23 @@ export const MobileLayout = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-black text-white flex flex-col">
+    <div className="min-h-screen bg-[#0F0F0F] text-white flex flex-col">
       {/* Main Content */}
       <div className="flex-1 overflow-hidden">
         {renderContent()}
       </div>
 
-      {/* Bottom Navigation - Open style with transparent background */}
-      <div className="bg-black/90 backdrop-blur-xl border-t border-white/10 px-2 py-4 safe-area-bottom">
+      {/* Bottom Navigation - Refined transparent design */}
+      <div className="bg-black/95 backdrop-blur-xl border-t border-white/5 px-4 py-4 safe-area-bottom">
         <div className="flex justify-around items-center max-w-md mx-auto">
           {tabs.map(({ id, icon: Icon, label }) => (
             <button
               key={id}
               onClick={() => setActiveTab(id)}
-              className={`flex flex-col items-center py-2 px-4 rounded-2xl transition-all duration-300 ${
+              className={`flex flex-col items-center py-2 px-4 rounded-2xl transition-all duration-300 min-w-[48px] min-h-[48px] ${
                 activeTab === id
                   ? 'text-orange-500'
-                  : 'text-white/60 hover:text-white/80'
+                  : 'text-white/50 hover:text-white/70'
               }`}
             >
               <Icon 
@@ -104,7 +104,7 @@ export const MobileLayout = () => {
                 }`} 
               />
               <span className={`text-xs font-medium transition-all duration-300 ${
-                activeTab === id ? 'opacity-100' : 'opacity-70'
+                activeTab === id ? 'opacity-100' : 'opacity-60'
               }`}>
                 {label}
               </span>
