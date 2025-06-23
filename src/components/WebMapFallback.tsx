@@ -78,8 +78,8 @@ export const WebMapFallback = ({ onListingSelect, onEdit }: MapProps) => {
   const mapMarkers: MapMarker[] = useMemo(() => {
     return listings.map((listing, index) => ({
       id: listing.id,
-      latitude: listing.lat ? parseFloat(listing.lat) : mapRegion.latitude + (Math.random() - 0.5) * 0.1 * (index + 1),
-      longitude: listing.lng ? parseFloat(listing.lng) : mapRegion.longitude + (Math.random() - 0.5) * 0.1 * (index + 1),
+      latitude: listing.lat ? parseFloat(listing.lat.toString()) : mapRegion.latitude + (Math.random() - 0.5) * 0.1 * (index + 1),
+      longitude: listing.lng ? parseFloat(listing.lng.toString()) : mapRegion.longitude + (Math.random() - 0.5) * 0.1 * (index + 1),
       listing,
     }));
   }, [listings, mapRegion]);
