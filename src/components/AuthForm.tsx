@@ -43,29 +43,29 @@ export const AuthForm = () => {
       />
       
       {/* Dark Overlay */}
-      <div className="absolute inset-0 bg-black/60" />
+      <div className="absolute inset-0 bg-black/70" />
 
       {/* Content */}
       <div className="relative z-10 min-h-screen flex flex-col">
-        {/* Logo */}
-        <div className="flex-1 flex items-center justify-center px-8">
-          <h1 className="text-white text-4xl font-semibold tracking-tight text-center">
+        {/* Logo - More prominent spacing like Open */}
+        <div className="flex-1 flex items-center justify-center px-8 pt-16">
+          <h1 className="text-white text-5xl font-light tracking-wide text-center" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif', fontWeight: '300' }}>
             Nest View
           </h1>
         </div>
 
-        {/* Bottom Sheet */}
-        <div className="px-6 pb-8">
-          <Card className="w-full max-w-sm mx-auto bg-black/80 backdrop-blur-xl border-white/10 rounded-2xl">
-            <CardContent className="p-6">
-              {/* Tab Switcher */}
-              <div className="flex justify-center mb-6">
-                <div className="flex bg-white/5 rounded-full p-1">
+        {/* Bottom Sheet - More refined like Open */}
+        <div className="px-6 pb-12">
+          <Card className="w-full max-w-sm mx-auto bg-black/80 backdrop-blur-xl border-white/10 rounded-3xl shadow-2xl">
+            <CardContent className="p-8">
+              {/* Tab Switcher - Refined pill design */}
+              <div className="flex justify-center mb-8">
+                <div className="flex bg-white/8 rounded-full p-1.5 backdrop-blur-sm">
                   <button
                     onClick={() => setActiveTab('signin')}
-                    className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${
+                    className={`px-8 py-3 rounded-full text-sm font-medium transition-all duration-300 ${
                       activeTab === 'signin'
-                        ? 'bg-white text-black'
+                        ? 'bg-white text-black shadow-lg'
                         : 'text-white/70 hover:text-white'
                     }`}
                   >
@@ -73,9 +73,9 @@ export const AuthForm = () => {
                   </button>
                   <button
                     onClick={() => setActiveTab('signup')}
-                    className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${
+                    className={`px-8 py-3 rounded-full text-sm font-medium transition-all duration-300 ${
                       activeTab === 'signup'
-                        ? 'bg-white text-black'
+                        ? 'bg-white text-black shadow-lg'
                         : 'text-white/70 hover:text-white'
                     }`}
                   >
@@ -85,15 +85,15 @@ export const AuthForm = () => {
               </div>
 
               {activeTab === 'signin' ? (
-                <form onSubmit={handleSignIn} className="space-y-6">
-                  <div className="space-y-4">
+                <form onSubmit={handleSignIn} className="space-y-8">
+                  <div className="space-y-6">
                     <div>
                       <input
                         type="email"
                         placeholder="Enter email"
                         value={signInData.email}
                         onChange={(e) => setSignInData({ ...signInData, email: e.target.value })}
-                        className="w-full bg-transparent border-0 border-b border-white/20 text-white placeholder-white/50 py-3 text-lg focus:border-white focus:outline-none transition-colors"
+                        className="w-full bg-transparent border-0 border-b border-white/20 text-white placeholder-white/50 py-4 text-lg focus:border-white focus:outline-none transition-colors font-light"
                         required
                       />
                     </div>
@@ -103,48 +103,48 @@ export const AuthForm = () => {
                         placeholder="Password"
                         value={signInData.password}
                         onChange={(e) => setSignInData({ ...signInData, password: e.target.value })}
-                        className="w-full bg-transparent border-0 border-b border-white/20 text-white placeholder-white/50 py-3 text-lg focus:border-white focus:outline-none transition-colors"
+                        className="w-full bg-transparent border-0 border-b border-white/20 text-white placeholder-white/50 py-4 text-lg focus:border-white focus:outline-none transition-colors font-light"
                         required
                       />
                     </div>
                   </div>
 
-                  <div className="space-y-4">
+                  <div className="space-y-6 pt-4">
                     <Button
                       type="submit"
                       disabled={signIn.isPending}
-                      className="w-full bg-transparent border border-white text-white hover:bg-white hover:text-black transition-all duration-300 py-3 rounded-full font-medium flex items-center justify-center gap-2"
+                      className="w-full bg-transparent border border-white/40 text-white hover:bg-white hover:text-black transition-all duration-500 py-4 rounded-full font-medium text-base flex items-center justify-center gap-3 shadow-lg backdrop-blur-sm"
                     >
                       {signIn.isPending ? 'Signing in...' : 'Sign in'}
-                      <ArrowRight className="w-4 h-4" />
+                      <ArrowRight className="w-5 h-5" />
                     </Button>
                     
                     <button
                       type="button"
                       onClick={() => setActiveTab('signup')}
-                      className="w-full text-center text-orange-500 hover:text-orange-400 transition-colors text-sm"
+                      className="w-full text-center text-orange-500 hover:text-orange-400 transition-colors text-sm font-light"
                     >
                       Create account
                     </button>
                   </div>
                 </form>
               ) : (
-                <form onSubmit={handleSignUp} className="space-y-6">
-                  <div className="space-y-4">
-                    <div className="grid grid-cols-2 gap-3">
+                <form onSubmit={handleSignUp} className="space-y-8">
+                  <div className="space-y-6">
+                    <div className="grid grid-cols-2 gap-4">
                       <input
                         type="text"
                         placeholder="First name"
                         value={signUpData.firstName}
                         onChange={(e) => setSignUpData({ ...signUpData, firstName: e.target.value })}
-                        className="bg-transparent border-0 border-b border-white/20 text-white placeholder-white/50 py-3 focus:border-white focus:outline-none transition-colors"
+                        className="bg-transparent border-0 border-b border-white/20 text-white placeholder-white/50 py-4 focus:border-white focus:outline-none transition-colors font-light"
                       />
                       <input
                         type="text"
                         placeholder="Last name"
                         value={signUpData.lastName}
                         onChange={(e) => setSignUpData({ ...signUpData, lastName: e.target.value })}
-                        className="bg-transparent border-0 border-b border-white/20 text-white placeholder-white/50 py-3 focus:border-white focus:outline-none transition-colors"
+                        className="bg-transparent border-0 border-b border-white/20 text-white placeholder-white/50 py-4 focus:border-white focus:outline-none transition-colors font-light"
                       />
                     </div>
                     
@@ -153,7 +153,7 @@ export const AuthForm = () => {
                       placeholder="Enter email"
                       value={signUpData.email}
                       onChange={(e) => setSignUpData({ ...signUpData, email: e.target.value })}
-                      className="w-full bg-transparent border-0 border-b border-white/20 text-white placeholder-white/50 py-3 text-lg focus:border-white focus:outline-none transition-colors"
+                      className="w-full bg-transparent border-0 border-b border-white/20 text-white placeholder-white/50 py-4 text-lg focus:border-white focus:outline-none transition-colors font-light"
                       required
                     />
                     
@@ -162,16 +162,16 @@ export const AuthForm = () => {
                       placeholder="Password"
                       value={signUpData.password}
                       onChange={(e) => setSignUpData({ ...signUpData, password: e.target.value })}
-                      className="w-full bg-transparent border-0 border-b border-white/20 text-white placeholder-white/50 py-3 text-lg focus:border-white focus:outline-none transition-colors"
+                      className="w-full bg-transparent border-0 border-b border-white/20 text-white placeholder-white/50 py-4 text-lg focus:border-white focus:outline-none transition-colors font-light"
                       required
                     />
 
                     <div>
                       <Select value={signUpData.role} onValueChange={(value: AppRole) => setSignUpData({ ...signUpData, role: value })}>
-                        <SelectTrigger className="w-full bg-transparent border-0 border-b border-white/20 text-white py-3 focus:border-white rounded-none">
+                        <SelectTrigger className="w-full bg-transparent border-0 border-b border-white/20 text-white py-4 focus:border-white rounded-none">
                           <SelectValue placeholder="Select role" />
                         </SelectTrigger>
-                        <SelectContent className="bg-gray-900 border-gray-800">
+                        <SelectContent className="bg-gray-900 border-gray-800 backdrop-blur-xl">
                           {ROLES.map((role) => (
                             <SelectItem key={role} value={role} className="text-white hover:bg-gray-800">
                               {ROLE_LABELS[role]}
@@ -182,20 +182,20 @@ export const AuthForm = () => {
                     </div>
                   </div>
 
-                  <div className="space-y-4">
+                  <div className="space-y-6 pt-4">
                     <Button
                       type="submit"
                       disabled={signUp.isPending}
-                      className="w-full bg-transparent border border-white text-white hover:bg-white hover:text-black transition-all duration-300 py-3 rounded-full font-medium flex items-center justify-center gap-2"
+                      className="w-full bg-transparent border border-white/40 text-white hover:bg-white hover:text-black transition-all duration-500 py-4 rounded-full font-medium text-base flex items-center justify-center gap-3 shadow-lg backdrop-blur-sm"
                     >
                       {signUp.isPending ? 'Creating account...' : 'Create account'}
-                      <ArrowRight className="w-4 h-4" />
+                      <ArrowRight className="w-5 h-5" />
                     </Button>
                     
                     <button
                       type="button"
                       onClick={() => setActiveTab('signin')}
-                      className="w-full text-center text-orange-500 hover:text-orange-400 transition-colors text-sm"
+                      className="w-full text-center text-orange-500 hover:text-orange-400 transition-colors text-sm font-light"
                     >
                       Sign in
                     </button>

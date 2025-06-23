@@ -21,7 +21,7 @@ export const MobileLayout = () => {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
-        <div className="text-white text-lg">Loading...</div>
+        <div className="text-white text-lg font-light">Loading...</div>
       </div>
     );
   }
@@ -68,13 +68,13 @@ export const MobileLayout = () => {
     }
   };
 
-  const isAgent = currentUser?.role === 'agent';
+  const isAgent = currentUser?.role === 'agent' || currentUser?.role === 'admin';
 
   const tabs = [
     { id: 'map' as TabType, icon: Home, label: 'Map' },
     { id: 'search' as TabType, icon: Search, label: 'Search' },
     ...(isAgent ? [{ id: 'add' as TabType, icon: Plus, label: 'Add' }] : []),
-    { id: 'favorites' as TabType, icon: Heart, label: 'Favorites' },
+    { id: 'favorites' as TabType, icon: Heart, label: 'Saved' },
     { id: 'profile' as TabType, icon: User, label: 'Profile' },
   ];
 
@@ -85,21 +85,29 @@ export const MobileLayout = () => {
         {renderContent()}
       </div>
 
-      {/* Bottom Navigation */}
-      <div className="bg-gray-900 border-t border-gray-800 px-2 py-2 safe-area-bottom">
-        <div className="flex justify-around items-center">
+      {/* Bottom Navigation - Open style with transparent background */}
+      <div className="bg-black/90 backdrop-blur-xl border-t border-white/10 px-2 py-4 safe-area-bottom">
+        <div className="flex justify-around items-center max-w-md mx-auto">
           {tabs.map(({ id, icon: Icon, label }) => (
             <button
               key={id}
               onClick={() => setActiveTab(id)}
-              className={`flex flex-col items-center py-2 px-3 rounded-lg transition-colors ${
+              className={`flex flex-col items-center py-2 px-4 rounded-2xl transition-all duration-300 ${
                 activeTab === id
-                  ? 'text-orange-500 bg-gray-800'
-                  : 'text-gray-400 hover:text-gray-200'
+                  ? 'text-orange-500'
+                  : 'text-white/60 hover:text-white/80'
               }`}
             >
-              <Icon className="w-6 h-6 mb-1" />
-              <span className="text-xs font-medium">{label}</span>
+              <Icon 
+                className={`w-6 h-6 mb-1 transition-all duration-300 ${
+                  activeTab === id ? 'stroke-2' : 'stroke-1'
+                }`} 
+              />
+              <span className={`text-xs font-medium transition-all duration-300 ${
+                activeTab === id ? 'opacity-100' : 'opacity-70'
+              }`}>
+                {label}
+              </span>
             </button>
           ))}
         </div>
