@@ -2,11 +2,13 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { MobileListingCard } from './MobileListingCard';
+import { ListingDetail } from './ListingDetail';
 import { SkeletonLoader } from './SkeletonLoader';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import { Heart } from 'lucide-react';
-import { Colors, Typography } from '@/theme/tokens';
+import { Typography } from '@/theme/tokens';
+import { useState } from 'react';
 
 interface FavoritesViewProps {
   onEdit?: (listing: any) => void;
@@ -16,6 +18,8 @@ export const FavoritesView = ({ onEdit }: FavoritesViewProps) => {
   const { user } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const [selectedListing, setSelectedListing] = useState(null);
+  const [showListingDetail, setShowListingDetail] = useState(false);
 
   const { data: favorites = [], isLoading } = useQuery({
     queryKey: ['favorites-mobile'],
@@ -85,11 +89,30 @@ export const FavoritesView = ({ onEdit }: FavoritesViewProps) => {
     },
   });
 
+  const handleListingClick = (listing: any) => {
+    setSelectedListing(listing);
+    setShowListingDetail(true);
+  };
+
+  const handleCloseDetail = () => {
+    setShowListingDetail(false);
+    setSelectedListing(null);
+  };
+
+  if (showListingDetail && selectedListing) {
+    return (
+      <ListingDetail
+        listingId={selectedListing.id}
+        onClose={handleCloseDetail}
+      />
+    );
+  }
+
   if (isLoading) {
     return (
       <div className="flex-1 bg-black flex flex-col">
         <div className="p-4 bg-gray-900 border-b border-gray-800">
-          <h1 className="text-2xl font-bold text-white" style={Typography.title}>Saved Properties</h1>
+          <h1 className="text-2xl font-bold text-white">Saved Properties</h1>
         </div>
         <div className="flex-1 p-4">
           <SkeletonLoader variant="card" count={3} />
@@ -102,7 +125,7 @@ export const FavoritesView = ({ onEdit }: FavoritesViewProps) => {
     <div className="flex-1 bg-black flex flex-col">
       {/* Header */}
       <div className="p-4 bg-gray-900 border-b border-gray-800">
-        <h1 className="text-2xl font-bold text-white" style={Typography.title}>Saved Properties</h1>
+        <h1 className="text-2xl font-bold text-white">Saved Properties</h1>
         <p className="text-gray-400 text-sm mt-1">
           {favorites.length} saved propert{favorites.length !== 1 ? 'ies' : 'y'}
         </p>
@@ -115,9 +138,9 @@ export const FavoritesView = ({ onEdit }: FavoritesViewProps) => {
             <div className="w-16 h-16 bg-gray-800 rounded-full flex items-center justify-center mb-4">
               <Heart className="w-8 h-8 text-gray-600" />
             </div>
-            <div className="text-gray-400 text-lg text-center" style={Typography.subtitle}>No saved properties</div>
+            <div className="text-gray-400 text-lg text-center">No saved properties</div>
             <div className="text-gray-500 text-sm text-center mt-2">
-              Properties you save will appear here
+              Tap the ♡ on any property to save it here
             </div>
           </div>
         ) : (
@@ -129,6 +152,7 @@ export const FavoritesView = ({ onEdit }: FavoritesViewProps) => {
                 onEdit={onEdit}
                 onToggleFavorite={(id) => toggleFavoriteMutation.mutate(id)}
                 isFavorited={favoriteIds.includes(listing.id)}
+                onClick={() => handleListingClick(listing)}
               />
             ))}
           </div>

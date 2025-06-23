@@ -26,7 +26,7 @@ export const MobileLayout = () => {
           <div className="w-16 h-16 bg-gradient-to-br from-amber-400/20 to-yellow-500/20 rounded-2xl flex items-center justify-center backdrop-blur-sm border border-amber-500/20 mx-auto mb-4">
             <div className="w-8 h-8 border-2 border-amber-400 border-t-transparent rounded-full animate-spin" />
           </div>
-          <div className="text-white/80 text-lg font-light" style={Typography.body}>
+          <div className="text-white/80 text-lg font-light">
             Loading your premium experience...
           </div>
         </div>
@@ -76,6 +76,7 @@ export const MobileLayout = () => {
     }
   };
 
+  // Only show Add tab for agents and admins
   const isAgent = currentUser?.role === 'agent' || currentUser?.role === 'admin';
 
   const tabs = [
@@ -128,7 +129,6 @@ export const MobileLayout = () => {
                   className={`text-xs font-medium transition-all duration-300 ${
                     activeTab === id ? 'opacity-100 font-semibold' : 'opacity-60'
                   }`}
-                  style={Typography.caption}
                 >
                   {label}
                 </span>

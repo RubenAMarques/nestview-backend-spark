@@ -4,7 +4,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
-import { ArrowLeft, Heart, Share, MapPin, Bed, Bath, Square, Phone, Mail, User } from 'lucide-react';
+import { ArrowLeft, Heart, Share, MapPin, Bed, Bath, Square, Phone, Mail, User, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -22,12 +22,16 @@ export const ListingDetail = ({ listingId, onClose }: ListingDetailProps) => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [showContact, setShowContact] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [contactForm, setContactForm] = useState({
     name: '',
     phone: '',
     email: '',
     message: '',
   });
+
+  // Mock images for carousel
+  const mockImages = [1, 2, 3, 4, 5, 6];
 
   // Fetch listing details
   const { data: listing, isLoading } = useQuery({
@@ -106,41 +110,79 @@ export const ListingDetail = ({ listingId, onClose }: ListingDetailProps) => {
     }).format(price);
   };
 
-  const handleContactSubmit = () => {
-    // Open email client with pre-filled data
+  const handleContactCall = () => {
+    window.location.href = 'tel:+31612345678';
+  };
+
+  const handleContactEmail = () => {
     const subject = `Inquiry about ${listing.title}`;
-    const body = `Hi,\n\nI'm interested in the property "${listing.title}" listed at ${formatPrice(listing.price_eur)}.\n\n${contactForm.message}\n\nBest regards,\n${contactForm.name}\nPhone: ${contactForm.phone}`;
+    const body = `Hi,\n\nI'm interested in the property "${listing.title}" listed at ${formatPrice(listing.price_eur)}.\n\nBest regards`;
     
     window.location.href = `mailto:agent@example.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    
-    toast({
-      title: "Opening email client",
-      description: "Your message has been prepared in your default email app",
-    });
-    
-    setShowContact(false);
+  };
+
+  const nextImage = () => {
+    setCurrentImageIndex((prev) => (prev + 1) % mockImages.length);
+  };
+
+  const prevImage = () => {
+    setCurrentImageIndex((prev) => (prev - 1 + mockImages.length) % mockImages.length);
   };
 
   return (
     <div className="min-h-screen bg-black text-white">
-      {/* Header with Image Gallery */}
+      {/* Photo Carousel */}
       <div className="relative h-80">
-        {/* Placeholder for image gallery */}
+        {/* Current Image */}
         <div className="absolute inset-0 bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
           <div className="text-center">
             <Square className="w-16 h-16 mx-auto mb-2 text-gray-400" />
-            <p className="text-gray-400">Property Gallery</p>
-            <p className="text-sm text-gray-500">6+ photos when available</p>
+            <p className="text-gray-400">Photo {currentImageIndex + 1} of {mockImages.length}</p>
           </div>
+        </div>
+        
+        {/* Navigation Arrows */}
+        {mockImages.length > 1 && (
+          <>
+            <Button
+              onClick={prevImage}
+              variant="glass"
+              size="sm"
+              className="absolute left-4 top-1/2 -translate-y-1/2 rounded-full p-3"
+            >
+              <ChevronLeft className="w-6 h-6" />
+            </Button>
+            <Button
+              onClick={nextImage}
+              variant="glass"
+              size="sm"
+              className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full p-3"
+            >
+              <ChevronRight className="w-6 h-6" />
+            </Button>
+          </>
+        )}
+        
+        {/* Image Indicators */}
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+          {mockImages.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentImageIndex(index)}
+              className={`w-2 h-2 rounded-full transition-colors ${
+                index === currentImageIndex ? 'bg-amber-500' : 'bg-white/30'
+              }`}
+            />
+          ))}
         </div>
         
         {/* Header Controls */}
         <div className="absolute top-12 left-4 right-4 flex justify-between items-center z-10">
           <Button
             onClick={onClose}
-            variant="ghost"
+            variant="glass"
             size="sm"
-            className="bg-black/50 backdrop-blur-sm rounded-full p-3 hover:bg-black/70"
+            className="rounded-full p-3"
           >
             <ArrowLeft className="w-6 h-6 text-white" />
           </Button>
@@ -148,16 +190,16 @@ export const ListingDetail = ({ listingId, onClose }: ListingDetailProps) => {
           <div className="flex gap-2">
             <Button
               onClick={() => toggleFavoriteMutation.mutate()}
-              variant="ghost"
+              variant="glass"
               size="sm"
-              className="bg-black/50 backdrop-blur-sm rounded-full p-3 hover:bg-black/70"
+              className="rounded-full p-3"
             >
               <Heart className={`w-6 h-6 ${isFavorited ? 'fill-red-500 text-red-500' : 'text-white'}`} />
             </Button>
             <Button
-              variant="ghost"
+              variant="glass"
               size="sm"
-              className="bg-black/50 backdrop-blur-sm rounded-full p-3 hover:bg-black/70"
+              className="rounded-full p-3"
             >
               <Share className="w-6 h-6 text-white" />
             </Button>
@@ -169,10 +211,10 @@ export const ListingDetail = ({ listingId, onClose }: ListingDetailProps) => {
       <div className="px-6 py-6 space-y-6">
         {/* Price and Title */}
         <div>
-          <div className="text-3xl font-bold text-orange-500 mb-2" style={Typography.hero}>
+          <div className="text-3xl font-bold text-amber-500 mb-2">
             {formatPrice(listing.price_eur)}
           </div>
-          <h1 className="text-2xl font-semibold text-white mb-2" style={Typography.title}>
+          <h1 className="text-2xl font-semibold text-white mb-2">
             {listing.title}
           </h1>
           {(listing.address || listing.city) && (
@@ -223,85 +265,25 @@ export const ListingDetail = ({ listingId, onClose }: ListingDetailProps) => {
         {/* Price History Sparkline */}
         <PriceSparkline listingId={listingId} currentPrice={listing.price_eur} />
 
-        {/* Contact Agent Button */}
-        <div className="pt-4">
+        {/* Contact Agent Buttons */}
+        <div className="pt-4 space-y-3">
           <Button
-            onClick={() => setShowContact(true)}
-            className="w-full bg-transparent border border-white text-white hover:bg-white hover:text-black transition-colors rounded-full py-4 flex items-center justify-center gap-2"
-            style={{ fontSize: '16px', fontWeight: '500' }}
+            onClick={handleContactCall}
+            className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-black rounded-full py-4 flex items-center justify-center gap-2"
           >
-            <User className="w-5 h-5" />
-            Contact Agent
-            <span className="ml-2">→</span>
+            <Phone className="w-5 h-5" />
+            Call Agent
+          </Button>
+          <Button
+            onClick={handleContactEmail}
+            variant="outline"
+            className="w-full border-gray-600 text-white hover:bg-gray-800 rounded-full py-4 flex items-center justify-center gap-2"
+          >
+            <Mail className="w-5 h-5" />
+            Email Agent
           </Button>
         </div>
       </div>
-
-      {/* Contact Agent Bottom Sheet */}
-      <BottomSheet
-        isOpen={showContact}
-        onClose={() => setShowContact(false)}
-        title="Contact Agent"
-      >
-        <div className="space-y-4">
-          <p className="text-gray-300 text-sm">
-            Get in touch with the listing agent for more information about this property.
-          </p>
-          
-          <div className="space-y-4">
-            <div>
-              <label className="block text-white font-medium mb-2">Your Name</label>
-              <Input
-                value={contactForm.name}
-                onChange={(e) => setContactForm(prev => ({ ...prev, name: e.target.value }))}
-                placeholder="John Doe"
-                className="bg-gray-800 border-gray-700 text-white"
-              />
-            </div>
-            
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className="block text-white font-medium mb-2">Phone</label>
-                <Input
-                  value={contactForm.phone}
-                  onChange={(e) => setContactForm(prev => ({ ...prev, phone: e.target.value }))}
-                  placeholder="+31 6 12345678"
-                  className="bg-gray-800 border-gray-700 text-white"
-                />
-              </div>
-              <div>
-                <label className="block text-white font-medium mb-2">Email</label>
-                <Input
-                  type="email"
-                  value={contactForm.email}
-                  onChange={(e) => setContactForm(prev => ({ ...prev, email: e.target.value }))}
-                  placeholder="john@example.com"
-                  className="bg-gray-800 border-gray-700 text-white"
-                />
-              </div>
-            </div>
-            
-            <div>
-              <label className="block text-white font-medium mb-2">Message</label>
-              <Textarea
-                value={contactForm.message}
-                onChange={(e) => setContactForm(prev => ({ ...prev, message: e.target.value }))}
-                placeholder="I'm interested in this property and would like to schedule a viewing..."
-                rows={4}
-                className="bg-gray-800 border-gray-700 text-white resize-none"
-              />
-            </div>
-            
-            <Button
-              onClick={handleContactSubmit}
-              className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white"
-            >
-              <Mail className="w-4 h-4 mr-2" />
-              Send Message
-            </Button>
-          </div>
-        </div>
-      </BottomSheet>
     </div>
   );
 };
