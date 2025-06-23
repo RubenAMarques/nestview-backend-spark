@@ -3,12 +3,13 @@ import { useState } from 'react';
 import { Home, Search, Plus, Heart, User } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useUser } from '@/hooks/useUser';
-import { AuthForm } from '@/components/AuthForm';
+import { LuxuryAuthForm } from '@/components/LuxuryAuthForm';
 import { MapView } from '@/components/MapView';
 import { SearchView } from '@/components/SearchView';
 import { ListingForm } from '@/components/ListingForm';
 import { FavoritesView } from '@/components/FavoritesView';
 import { ProfileView } from '@/components/ProfileView';
+import { Typography } from '@/theme/tokens';
 
 type TabType = 'map' | 'search' | 'add' | 'favorites' | 'profile';
 
@@ -20,14 +21,21 @@ export const MobileLayout = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-[#0F0F0F] flex items-center justify-center">
-        <div className="text-white text-lg font-light">Loading...</div>
+      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-gray-950 to-black flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 bg-gradient-to-br from-amber-400/20 to-yellow-500/20 rounded-2xl flex items-center justify-center backdrop-blur-sm border border-amber-500/20 mx-auto mb-4">
+            <div className="w-8 h-8 border-2 border-amber-400 border-t-transparent rounded-full animate-spin" />
+          </div>
+          <div className="text-white/80 text-lg font-light" style={Typography.body}>
+            Loading your premium experience...
+          </div>
+        </div>
       </div>
     );
   }
 
   if (!user) {
-    return <AuthForm />;
+    return <LuxuryAuthForm />;
   }
 
   const handleEditListing = (listing: any) => {
@@ -71,7 +79,7 @@ export const MobileLayout = () => {
   const isAgent = currentUser?.role === 'agent' || currentUser?.role === 'admin';
 
   const tabs = [
-    { id: 'map' as TabType, icon: Home, label: 'Map' },
+    { id: 'map' as TabType, icon: Home, label: 'Explore' },
     { id: 'search' as TabType, icon: Search, label: 'Search' },
     ...(isAgent ? [{ id: 'add' as TabType, icon: Plus, label: 'Add' }] : []),
     { id: 'favorites' as TabType, icon: Heart, label: 'Saved' },
@@ -79,19 +87,19 @@ export const MobileLayout = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#0F0F0F] text-white flex flex-col">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-gray-950 to-black text-white flex flex-col">
       {/* Main Content */}
       <div className="flex-1 overflow-hidden">
         {renderContent()}
       </div>
 
-      {/* Premium Bottom Navigation */}
+      {/* Luxury Bottom Navigation */}
       <div className="relative">
-        {/* Blur backdrop */}
-        <div className="absolute inset-0 bg-black/80 backdrop-blur-xl" />
+        {/* Premium glassmorphic backdrop */}
+        <div className="absolute inset-0 bg-black/60 backdrop-blur-2xl border-t border-white/5" />
         
         {/* Navigation content */}
-        <div className="relative border-t border-white/5 px-6 py-4 safe-area-bottom">
+        <div className="relative px-6 py-4 safe-area-bottom">
           <div className="flex justify-around items-center max-w-md mx-auto">
             {tabs.map(({ id, icon: Icon, label }) => (
               <button
@@ -99,8 +107,8 @@ export const MobileLayout = () => {
                 onClick={() => setActiveTab(id)}
                 className={`flex flex-col items-center py-2 px-3 rounded-2xl transition-all duration-300 min-w-[64px] min-h-[52px] group ${
                   activeTab === id
-                    ? 'text-orange-500'
-                    : 'text-white/50 hover:text-white/70'
+                    ? 'text-amber-400'
+                    : 'text-white/50 hover:text-white/80'
                 }`}
               >
                 <div className={`relative transition-all duration-300 ${
@@ -111,14 +119,17 @@ export const MobileLayout = () => {
                       activeTab === id ? 'stroke-2' : 'stroke-1.5'
                     }`} 
                   />
-                  {/* Active indicator */}
+                  {/* Elegant active indicator */}
                   {activeTab === id && (
-                    <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-orange-500 rounded-full" />
+                    <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-amber-400 rounded-full shadow-lg shadow-amber-400/50" />
                   )}
                 </div>
-                <span className={`text-xs font-medium transition-all duration-300 ${
-                  activeTab === id ? 'opacity-100 font-semibold' : 'opacity-60'
-                }`}>
+                <span 
+                  className={`text-xs font-medium transition-all duration-300 ${
+                    activeTab === id ? 'opacity-100 font-semibold' : 'opacity-60'
+                  }`}
+                  style={Typography.caption}
+                >
                   {label}
                 </span>
               </button>
