@@ -3,6 +3,7 @@ export const Colors = {
   bg: '#0F0F0F',
   surface: '#1E1E1E',
   surfaceElevated: '#252525',
+  card: '#1E1E1E',
   textPrimary: '#FFFFFF',
   textSecondary: '#A0A0A0',
   textTertiary: '#666666',
@@ -21,16 +22,16 @@ export const Colors = {
 };
 
 export const Typography = {
-  // Premium typography hierarchy
+  // Premium typography hierarchy with serif for headings, sans-serif for body
   hero: {
-    fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif',
+    fontFamily: 'ui-serif, Georgia, "Times New Roman", serif',
     fontSize: '32px',
-    fontWeight: '300',
+    fontWeight: '400',
     lineHeight: '1.2',
     letterSpacing: '-0.02em',
   },
   title: {
-    fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif',
+    fontFamily: 'ui-serif, Georgia, "Times New Roman", serif',
     fontSize: '24px',
     fontWeight: '600',
     lineHeight: '1.3',
@@ -67,6 +68,9 @@ export const Typography = {
     lineHeight: '1.2',
   },
 };
+
+// Legacy support - alias Typography as Fonts for backward compatibility
+export const Fonts = Typography;
 
 export const Spacing = {
   xs: '4px',

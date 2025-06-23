@@ -85,31 +85,45 @@ export const MobileLayout = () => {
         {renderContent()}
       </div>
 
-      {/* Bottom Navigation - Refined transparent design */}
-      <div className="bg-black/95 backdrop-blur-xl border-t border-white/5 px-4 py-4 safe-area-bottom">
-        <div className="flex justify-around items-center max-w-md mx-auto">
-          {tabs.map(({ id, icon: Icon, label }) => (
-            <button
-              key={id}
-              onClick={() => setActiveTab(id)}
-              className={`flex flex-col items-center py-2 px-4 rounded-2xl transition-all duration-300 min-w-[48px] min-h-[48px] ${
-                activeTab === id
-                  ? 'text-orange-500'
-                  : 'text-white/50 hover:text-white/70'
-              }`}
-            >
-              <Icon 
-                className={`w-6 h-6 mb-1 transition-all duration-300 ${
-                  activeTab === id ? 'stroke-2' : 'stroke-1'
-                }`} 
-              />
-              <span className={`text-xs font-medium transition-all duration-300 ${
-                activeTab === id ? 'opacity-100' : 'opacity-60'
-              }`}>
-                {label}
-              </span>
-            </button>
-          ))}
+      {/* Premium Bottom Navigation */}
+      <div className="relative">
+        {/* Blur backdrop */}
+        <div className="absolute inset-0 bg-black/80 backdrop-blur-xl" />
+        
+        {/* Navigation content */}
+        <div className="relative border-t border-white/5 px-6 py-4 safe-area-bottom">
+          <div className="flex justify-around items-center max-w-md mx-auto">
+            {tabs.map(({ id, icon: Icon, label }) => (
+              <button
+                key={id}
+                onClick={() => setActiveTab(id)}
+                className={`flex flex-col items-center py-2 px-3 rounded-2xl transition-all duration-300 min-w-[64px] min-h-[52px] group ${
+                  activeTab === id
+                    ? 'text-orange-500'
+                    : 'text-white/50 hover:text-white/70'
+                }`}
+              >
+                <div className={`relative transition-all duration-300 ${
+                  activeTab === id ? 'scale-110' : 'group-hover:scale-105'
+                }`}>
+                  <Icon 
+                    className={`w-6 h-6 mb-1 transition-all duration-300 ${
+                      activeTab === id ? 'stroke-2' : 'stroke-1.5'
+                    }`} 
+                  />
+                  {/* Active indicator */}
+                  {activeTab === id && (
+                    <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-orange-500 rounded-full" />
+                  )}
+                </div>
+                <span className={`text-xs font-medium transition-all duration-300 ${
+                  activeTab === id ? 'opacity-100 font-semibold' : 'opacity-60'
+                }`}>
+                  {label}
+                </span>
+              </button>
+            ))}
+          </div>
         </div>
       </div>
     </div>
